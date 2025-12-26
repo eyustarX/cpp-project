@@ -1,8 +1,8 @@
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <iomanip>
 using namespace std;
+
 struct Teacher {
     string name;
     float rating;
@@ -22,7 +22,7 @@ struct Course {
     float difficulty;
     string instructors[3];
     int instructorCount;
-    string prerequisites;  // CHANGED: Now a single string for text description
+    string prerequisites;
 };
 
 Teacher* findTeacherByName(Teacher* teachers, int teacherCount, string name) {
@@ -53,144 +53,84 @@ void addTeacherToCourse(Course* course, string teacherName) {
 int main() {
     Teacher teachers[50];
     Course courses[50];
-    int teacherCount = 0;
-    int courseCount = 0;
+    int teacherCount = 3;
+    int courseCount = 4;
 
     Teacher* teacherPtr = teachers;
     Course* coursePtr = courses;
 
-    ifstream tFile("teachers.dat");
-    if(tFile.is_open()) {
-        tFile >> teacherCount;
-        tFile.ignore();
+    // SAMPLE TEACHERS (always loaded)
+    teacherPtr->name = "Mrs. Eleni Teshome";
+    teacherPtr->rating = 4.5;
+    teacherPtr->ratingCount = 10;
+    teacherPtr->commentCount = 3;
+    teacherPtr->courseCount = 2;
+    teacherPtr->comments[0] = "Great teacher";
+    teacherPtr->comments[1] = "Very helpful";
+    teacherPtr->comments[2] = "Explains well";
+    teacherPtr->coursesTaught[0] = "SWEG2103";
+    teacherPtr->coursesTaught[1] = "SWEG2105";
 
-        for(int i = 0; i < teacherCount; i++) {
-            getline(tFile, (teacherPtr + i)->name);
-            tFile >> (teacherPtr + i)->rating;
-            tFile >> (teacherPtr + i)->ratingCount;
-            tFile >> (teacherPtr + i)->commentCount;
-            tFile >> (teacherPtr + i)->courseCount;
-            tFile.ignore();
+    (teacherPtr + 1)->name = "Dr. John Doe";
+    (teacherPtr + 1)->rating = 4.2;
+    (teacherPtr + 1)->ratingCount = 8;
+    (teacherPtr + 1)->commentCount = 2;
+    (teacherPtr + 1)->courseCount = 2;
+    (teacherPtr + 1)->comments[0] = "Knowledgeable";
+    (teacherPtr + 1)->comments[1] = "Fair grader";
+    (teacherPtr + 1)->coursesTaught[0] = "SWEG2103";
+    (teacherPtr + 1)->coursesTaught[1] = "SWEG2106";
 
-            for(int j = 0; j < (teacherPtr + i)->commentCount; j++) {
-                getline(tFile, (teacherPtr + i)->comments[j]);
-            }
-            
-            for(int j = 0; j < (teacherPtr + i)->courseCount; j++) {
-                getline(tFile, (teacherPtr + i)->coursesTaught[j]);
-            }
+    (teacherPtr + 2)->name = "Mr. Abraham";
+    (teacherPtr + 2)->rating = 4.8;
+    (teacherPtr + 2)->ratingCount = 12;
+    (teacherPtr + 2)->commentCount = 2;
+    (teacherPtr + 2)->courseCount = 1;
+    (teacherPtr + 2)->comments[0] = "Best teacher ever";
+    (teacherPtr + 2)->comments[1] = "Very practical";
+    (teacherPtr + 2)->coursesTaught[0] = "SWEG2104";
 
-            string dummy;
-            getline(tFile, dummy);
-        }
-        tFile.close();
-    }
+    // SAMPLE COURSES (always loaded)
+    coursePtr->code = "SWEG2103";
+    coursePtr->name = "Fundamentals of Programming I";
+    coursePtr->year = 2;
+    coursePtr->semester = 1;
+    coursePtr->description = "Fundamentals of Programming I establishes the foundation for software engineering using C++. It covers programming fundamentals including SDLC, algorithm design with flowcharts/pseudocode, and programming language paradigms. Students learn C++ syntax, variables, data types, operators, expressions, and input/output operations with debugging techniques. The course includes control structures (if, switch, loops) and data handling through arrays and string manipulation. Memory management concepts cover pointers, pointer arithmetic, and dynamic allocation.";
+    coursePtr->difficulty = 4.2;
+    coursePtr->instructorCount = 2;
+    coursePtr->instructors[0] = "Mrs. Eleni Teshome";
+    coursePtr->instructors[1] = "Dr. John Doe";
+    coursePtr->prerequisites = "None";
 
-    ifstream cFile("courses.dat");
-    if(cFile.is_open()) {
-        cFile >> courseCount;
-        cFile.ignore();
+    (coursePtr + 1)->code = "SWEG2104";
+    (coursePtr + 1)->name = "Data Structures";
+    (coursePtr + 1)->year = 2;
+    (coursePtr + 1)->semester = 2;
+    (coursePtr + 1)->description = "This course covers fundamental data structures including arrays, linked lists, stacks, queues, trees, and graphs. Students learn about time and space complexity analysis, recursion, and various algorithms for searching and sorting.";
+    (coursePtr + 1)->difficulty = 4.5;
+    (coursePtr + 1)->instructorCount = 1;
+    (coursePtr + 1)->instructors[0] = "Mr. Abraham";
+    (coursePtr + 1)->prerequisites = "SWEG2103 - Fundamentals of Programming I";
 
-        for(int i = 0; i < courseCount; i++) {
-            getline(cFile, (coursePtr + i)->code);
-            getline(cFile, (coursePtr + i)->name);
-            cFile >> (coursePtr + i)->year;
-            cFile >> (coursePtr + i)->semester;
-            cFile.ignore();
-            getline(cFile, (coursePtr + i)->description);
-            cFile >> (coursePtr + i)->difficulty;
-            cFile >> (coursePtr + i)->instructorCount;
-            cFile.ignore();  // REMOVED: prereqCount reading
-            getline(cFile, (coursePtr + i)->prerequisites);  // CHANGED: Read as single string
+    (coursePtr + 2)->code = "SWEG2105";
+    (coursePtr + 2)->name = "Database Systems";
+    (coursePtr + 2)->year = 3;
+    (coursePtr + 2)->semester = 1;
+    (coursePtr + 2)->description = "Introduction to database systems, SQL, normalization techniques, and database design principles. Covers relational algebra, transactions, concurrency control, and NoSQL databases.";
+    (coursePtr + 2)->difficulty = 4.0;
+    (coursePtr + 2)->instructorCount = 1;
+    (coursePtr + 2)->instructors[0] = "Mrs. Eleni Teshome";
+    (coursePtr + 2)->prerequisites = "SWEG2103 - Fundamentals of Programming I";
 
-            for(int j = 0; j < (coursePtr + i)->instructorCount; j++) {
-                getline(cFile, (coursePtr + i)->instructors[j]);
-            }
-
-            string dummy;
-            getline(cFile, dummy);
-        }
-        cFile.close();
-    }
-
-    if(teacherCount == 0) {
-        teacherPtr->name = "Mrs. Eleni Teshome";
-        teacherPtr->rating = 4.5;
-        teacherPtr->ratingCount = 10;
-        teacherPtr->commentCount = 3;
-        teacherPtr->courseCount = 2;
-        teacherPtr->comments[0] = "Great teacher";
-        teacherPtr->comments[1] = "Very helpful";
-        teacherPtr->comments[2] = "Explains well";
-        teacherPtr->coursesTaught[0] = "SWEG2103";
-        teacherPtr->coursesTaught[1] = "SWEG2105";
-
-        (teacherPtr + 1)->name = "Dr. John Doe";
-        (teacherPtr + 1)->rating = 4.2;
-        (teacherPtr + 1)->ratingCount = 8;
-        (teacherPtr + 1)->commentCount = 2;
-        (teacherPtr + 1)->courseCount = 2;
-        (teacherPtr + 1)->comments[0] = "Knowledgeable";
-        (teacherPtr + 1)->comments[1] = "Fair grader";
-        (teacherPtr + 1)->coursesTaught[0] = "SWEG2103";
-        (teacherPtr + 1)->coursesTaught[1] = "SWEG2106";
-
-        (teacherPtr + 2)->name = "Mr. Abraham";
-        (teacherPtr + 2)->rating = 4.8;
-        (teacherPtr + 2)->ratingCount = 12;
-        (teacherPtr + 2)->commentCount = 2;
-        (teacherPtr + 2)->courseCount = 1;
-        (teacherPtr + 2)->comments[0] = "Best teacher ever";
-        (teacherPtr + 2)->comments[1] = "Very practical";
-        (teacherPtr + 2)->coursesTaught[0] = "SWEG2104";
-
-        teacherCount = 3;
-    }
-
-    if(courseCount == 0) {
-        coursePtr->code = "SWEG2103";
-        coursePtr->name = "Fundamentals of Programming I";
-        coursePtr->year = 2;
-        coursePtr->semester = 1;
-        coursePtr->description = "Fundamentals of Programming I establishes the foundation for software engineering using C++. It covers programming fundamentals including SDLC, algorithm design with flowcharts/pseudocode, and programming language paradigms. Students learn C++ syntax, variables, data types, operators, expressions, and input/output operations with debugging techniques. The course includes control structures (if, switch, loops) and data handling through arrays and string manipulation. Memory management concepts cover pointers, pointer arithmetic, and dynamic allocation.";
-        coursePtr->difficulty = 4.2;
-        coursePtr->instructorCount = 2;
-        coursePtr->instructors[0] = "Mrs. Eleni Teshome";
-        coursePtr->instructors[1] = "Dr. John Doe";
-        coursePtr->prerequisites = "None";  // CHANGED: Simple text
-
-        (coursePtr + 1)->code = "SWEG2104";
-        (coursePtr + 1)->name = "Data Structures";
-        (coursePtr + 1)->year = 2;
-        (coursePtr + 1)->semester = 2;
-        (coursePtr + 1)->description = "This course covers fundamental data structures including arrays, linked lists, stacks, queues, trees, and graphs. Students learn about time and space complexity analysis, recursion, and various algorithms for searching and sorting.";
-        (coursePtr + 1)->difficulty = 4.5;
-        (coursePtr + 1)->instructorCount = 1;
-        (coursePtr + 1)->instructors[0] = "Mr. Abraham";
-        (coursePtr + 1)->prerequisites = "SWEG2103 - Fundamentals of Programming I";  // CHANGED: Simple text
-
-        (coursePtr + 2)->code = "SWEG2105";
-        (coursePtr + 2)->name = "Database Systems";
-        (coursePtr + 2)->year = 3;
-        (coursePtr + 2)->semester = 1;
-        (coursePtr + 2)->description = "Introduction to database systems, SQL, normalization techniques, and database design principles. Covers relational algebra, transactions, concurrency control, and NoSQL databases.";
-        (coursePtr + 2)->difficulty = 4.0;
-        (coursePtr + 2)->instructorCount = 1;
-        (coursePtr + 2)->instructors[0] = "Mrs. Eleni Teshome";
-        (coursePtr + 2)->prerequisites = "SWEG2103 - Fundamentals of Programming I";  // CHANGED: Simple text
-
-        (coursePtr + 3)->code = "SWEG2106";
-        (coursePtr + 3)->name = "OOP Programming";
-        (coursePtr + 3)->year = 2;
-        (coursePtr + 3)->semester = 2;
-        (coursePtr + 3)->description = "Object-Oriented Programming concepts including classes, objects, inheritance, polymorphism, encapsulation, and abstraction. Design patterns and software engineering principles.";
-        (coursePtr + 3)->difficulty = 3.8;
-        (coursePtr + 3)->instructorCount = 1;
-        (coursePtr + 3)->instructors[0] = "Dr. John Doe";
-        (coursePtr + 3)->prerequisites = "SWEG2103 - Fundamentals of Programming I";  // CHANGED: Simple text
-
-        courseCount = 4;
-    }
+    (coursePtr + 3)->code = "SWEG2106";
+    (coursePtr + 3)->name = "OOP Programming";
+    (coursePtr + 3)->year = 2;
+    (coursePtr + 3)->semester = 2;
+    (coursePtr + 3)->description = "Object-Oriented Programming concepts including classes, objects, inheritance, polymorphism, encapsulation, and abstraction. Design patterns and software engineering principles.";
+    (coursePtr + 3)->difficulty = 3.8;
+    (coursePtr + 3)->instructorCount = 1;
+    (coursePtr + 3)->instructors[0] = "Dr. John Doe";
+    (coursePtr + 3)->prerequisites = "SWEG2103 - Fundamentals of Programming I";
 
     int mainChoice;
 
@@ -291,7 +231,6 @@ int main() {
             cout << "Semester:    " << selectedCourse->semester << "\n";
             cout << "Difficulty:  " << fixed << setprecision(1) << selectedCourse->difficulty << "/5.0\n\n";
             
-            // SIMPLIFIED PREREQUISITES DISPLAY - Just show the text
             cout << "PREREQUISITES:\n";
             cout << "==============\n";
             cout << selectedCourse->prerequisites << "\n\n";
@@ -565,7 +504,8 @@ int main() {
             } while(instructorChoice != 4);
 
         } else if(mainChoice == 3) {
-            cout << "\nSaving data...\n";
+            cout << "\nExiting...\n";
+            cout << "Note: Changes are not saved (file handling removed)\n";
         } else {
             cout << "Invalid choice!\n";
             cout << "Press Enter to continue...";
@@ -574,57 +514,6 @@ int main() {
         }
 
     } while(mainChoice != 3);
-
-    ofstream tFileOut("teachers.dat");
-    if(tFileOut.is_open()) {
-        tFileOut << teacherCount << endl;
-        Teacher* currentTeacher;
-
-        for(int i = 0; i < teacherCount; i++) {
-            currentTeacher = teacherPtr + i;
-            tFileOut << currentTeacher->name << endl;
-            tFileOut << currentTeacher->rating << endl;
-            tFileOut << currentTeacher->ratingCount << endl;
-            tFileOut << currentTeacher->commentCount << endl;
-            tFileOut << currentTeacher->courseCount << endl;
-
-            for(int j = 0; j < currentTeacher->commentCount; j++) {
-                tFileOut << currentTeacher->comments[j] << endl;
-            }
-            
-            for(int j = 0; j < currentTeacher->courseCount; j++) {
-                tFileOut << currentTeacher->coursesTaught[j] << endl;
-            }
-            
-            tFileOut << "---" << endl;
-        }
-        tFileOut.close();
-    }
-
-    ofstream cFileOut("courses.dat");
-    if(cFileOut.is_open()) {
-        cFileOut << courseCount << endl;
-        Course* currentCourse;
-
-        for(int i = 0; i < courseCount; i++) {
-            currentCourse = coursePtr + i;
-            cFileOut << currentCourse->code << endl;
-            cFileOut << currentCourse->name << endl;
-            cFileOut << currentCourse->year << endl;
-            cFileOut << currentCourse->semester << endl;
-            cFileOut << currentCourse->description << endl;
-            cFileOut << currentCourse->difficulty << endl;
-            cFileOut << currentCourse->instructorCount << endl;
-            cFileOut << currentCourse->prerequisites << endl;  // CHANGED: Save as single string
-
-            for(int j = 0; j < currentCourse->instructorCount; j++) {
-                cFileOut << currentCourse->instructors[j] << endl;
-            }
-            
-            cFileOut << "---" << endl;
-        }
-        cFileOut.close();
-    }
 
     cout << "\nThank you for using our system!\n";
     cout << "Goodbye!\n";
