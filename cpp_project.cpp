@@ -1,15 +1,9 @@
-// ==============================================
-// COURSE REVIEW SYSTEM - SINGLE MAIN FUNCTION
-// Using Pointers to Access Structures
-// ==============================================
-
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <iomanip>
 using namespace std;
 
-// ==================== STRUCTURES ====================
 struct Teacher {
     string name;
     float rating;
@@ -33,7 +27,6 @@ struct Course {
     int prereqCount;
 };
 
-// ==================== FUNCTION TO CONVERT YEAR NUMBER TO STRING ====================
 string getYearString(int year) {
     switch(year) {
         case 2: return "2nd Year";
@@ -44,12 +37,10 @@ string getYearString(int year) {
     }
 }
 
-// ==================== FUNCTION TO CONVERT SEMESTER NUMBER TO STRING ====================
 string getSemesterString(int semester) {
     return (semester == 1) ? "1st Semester" : "2nd Semester";
 }
 
-// ==================== FUNCTION TO FIND TEACHER BY NAME ====================
 Teacher* findTeacherByName(Teacher* teachers, int teacherCount, string name) {
     for(int i = 0; i < teacherCount; i++) {
         if((teachers + i)->name == name) {
@@ -59,7 +50,6 @@ Teacher* findTeacherByName(Teacher* teachers, int teacherCount, string name) {
     return nullptr;
 }
 
-// ==================== FUNCTION TO FIND COURSE BY CODE ====================
 Course* findCourseByCode(Course* courses, int courseCount, string code) {
     for(int i = 0; i < courseCount; i++) {
         if((courses + i)->code == code) {
@@ -69,7 +59,6 @@ Course* findCourseByCode(Course* courses, int courseCount, string code) {
     return nullptr;
 }
 
-// ==================== FUNCTION TO ADD TEACHER TO COURSE ====================
 void addTeacherToCourse(Course* course, string teacherName) {
     if(course->instructorCount < 3) {
         course->instructors[course->instructorCount] = teacherName;
@@ -77,19 +66,15 @@ void addTeacherToCourse(Course* course, string teacherName) {
     }
 }
 
-// ==================== MAIN FUNCTION ====================
 int main() {
-    // ==================== VARIABLE DECLARATIONS ====================
     Teacher teachers[50];
     Course courses[50];
     int teacherCount = 0;
     int courseCount = 0;
 
-    // ==================== POINTER DECLARATIONS ====================
     Teacher* teacherPtr = teachers;
     Course* coursePtr = courses;
 
-    // ==================== LOAD DATA ====================
     ifstream tFile("teachers.dat");
     if(tFile.is_open()) {
         tFile >> teacherCount;
@@ -148,7 +133,7 @@ int main() {
         cFile.close();
     }
 
-    // ==================== ADD SAMPLE DATA IF EMPTY ====================
+    // add sample data if it is empty
     if(teacherCount == 0) {
         teacherPtr->name = "Mrs. Eleni Teshome";
         teacherPtr->rating = 4.5;
@@ -228,10 +213,8 @@ int main() {
         (coursePtr + 3)->prerequisites[0] = "SWEG2103";
         (coursePtr + 3)->instructors[0] = "Dr. John Doe";
 
-        courseCount = 4;
     }
 
-    // ==================== MAIN PROGRAM LOOP ====================
     int mainChoice;
 
     do {
@@ -340,7 +323,6 @@ int main() {
             cout << "Semester:    " << getSemesterString(selectedCourse->semester) << "\n";
             cout << "Difficulty:  " << fixed << setprecision(1) << selectedCourse->difficulty << "/5.0\n\n";
             
-            // Display prerequisites as simple list
             if(selectedCourse->prereqCount > 0) {
                 cout << "PREREQUISITES:\n";
                 cout << "==============\n";
@@ -395,7 +377,6 @@ int main() {
                 cin >> instructorChoice;
 
                 if(instructorChoice == 1) {
-                    // VIEW A TEACHER (with comments)
                     system("cls");
                     cout << "=========================================\n";
                     cout << "       VIEW A TEACHER\n";
@@ -407,7 +388,6 @@ int main() {
                         continue;
                     }
                     
-                    // Display available courses
                     cout << "Select a course to view its teachers:\n";
                     cout << "======================================\n";
                     for(int i = 0; i < courseCount; i++) {
@@ -463,7 +443,6 @@ int main() {
                                 }
                                 cout << "\n";
                                 
-                                // Display comments for this teacher
                                 cout << "STUDENT COMMENTS:\n";
                                 cout << "=================\n";
                                 if(teacher->commentCount == 0) {
@@ -485,7 +464,6 @@ int main() {
                     system("pause");
 
                 } else if(instructorChoice == 2) {
-                    // RATE A TEACHER
                     if(teacherCount == 0) {
                         cout << "\nNo teachers available.\n";
                         system("pause");
@@ -548,7 +526,6 @@ int main() {
                     system("pause");
 
                 } else if(instructorChoice == 3) {
-                    // ADD NEW TEACHER
                     if(teacherCount >= 50) {
                         cout << "\nMaximum number of teachers reached!\n";
                         system("pause");
@@ -575,7 +552,6 @@ int main() {
                     cout << "Available courses from Course Overview System:\n";
                     cout << "===============================================\n";
                     
-                    // Show available courses from the system
                     for(int i = 0; i < courseCount; i++) {
                         Course* currentCourse = coursePtr + i;
                         cout << currentCourse->code << " - " << currentCourse->name 
@@ -595,15 +571,12 @@ int main() {
                             break;
                         }
                         
-                        // Check if course exists in the system
                         Course* course = findCourseByCode(coursePtr, courseCount, courseCode);
                         if(course != nullptr) {
-                            // Add course to teacher
                             newTeacher->coursesTaught[coursesAdded] = courseCode;
                             coursesAdded++;
                             newTeacher->courseCount++;
                             
-                            // Add teacher to course
                             addTeacherToCourse(course, newTeacher->name);
                             
                             cout << "Added " << course->name << " to teacher's courses.\n";
@@ -628,7 +601,6 @@ int main() {
                     system("pause");
 
                 } else if(instructorChoice == 4) {
-                    // BACK TO MAIN MENU
                     break;
                 } else {
                     cout << "Invalid choice!\n";
@@ -638,7 +610,6 @@ int main() {
             } while(instructorChoice != 4);
 
         } else if(mainChoice == 3) {
-            // EXIT
             cout << "\nSaving data...\n";
         } else {
             cout << "Invalid choice!\n";
@@ -647,7 +618,7 @@ int main() {
 
     } while(mainChoice != 3);
 
-    // ==================== SAVE DATA ====================
+    // save data
     ofstream tFileOut("teachers.dat");
     if(tFileOut.is_open()) {
         tFileOut << teacherCount << endl;
