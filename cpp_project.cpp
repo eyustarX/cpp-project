@@ -100,7 +100,6 @@ bool hasInstructor(Course* course) {
 }
 
 void displayCourseDetails(Course* course, Teacher* teachers, int teacherCount) {
-    system("cls");
     cout << "=========================================\n";
     cout << "   COURSE DETAILS\n";
     cout << "=========================================\n\n";
@@ -266,7 +265,6 @@ int main() {
     char runAgain = 'y';
     
     while(runAgain == 'y' || runAgain == 'Y') {
-        system("cls");
         cout << "    COURSE REVIEW SYSTEM - AASTU\n";
         cout << "1. View Course Overview\n";
         cout << "2. Instructor Rating System\n";
@@ -286,7 +284,6 @@ int main() {
             char viewMore = 'y';
             
             while(viewMore == 'y' || viewMore == 'Y') {
-                system("cls");
                 cout << "        COURSE OVERVIEW\n";
                 cout << "Select Academic Year:\n";
                 cout << "1. Year 2\n";
@@ -342,7 +339,6 @@ int main() {
                     continue;
                 }
 
-                system("cls");
                 cout << "   Year " << year << " - Semester " << semester << "\n\n";
                 
                 cout << "Available Courses:\n";
@@ -371,7 +367,6 @@ int main() {
                 Course* selectedCourse = availableCourses[courseChoice - 1];
                 
                 // MODIFIED DISPLAY - SIMPLIFIED WITH SINGLE INSTRUCTOR
-                system("cls");
                 cout << "=========================================\n";
                 cout << "   COURSE DETAILS\n";
                 cout << "=========================================\n\n";
@@ -405,7 +400,6 @@ int main() {
             int instructorChoice;
 
             do {
-                system("cls");
                 cout << "      INSTRUCTOR RATING SYSTEM\n";
                 cout << "1. View a Teacher\n";
                 cout << "2. Rate a Teacher\n";
@@ -416,7 +410,6 @@ int main() {
                 cin >> instructorChoice;
 
                 if(instructorChoice == 1) {
-                    system("cls");
                     cout << "       VIEW A TEACHER\n";
                     
                     if(courseCount == 0) {
@@ -444,7 +437,6 @@ int main() {
                     
                     Course* selectedCourse = coursePtr + (courseChoice - 1);
                     
-                    system("cls");
                     cout << "   TEACHERS FOR " << selectedCourse->code << "\n";
                     
                     cout << "Course: " << selectedCourse->code << " - " 
